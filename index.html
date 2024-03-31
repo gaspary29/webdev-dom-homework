@@ -80,6 +80,7 @@
 
   //мои мутки с ответом на коментарий
   const replyComment = () => {
+    const TextComent = document.getElementById('text-coment'); 
     const reponseComment = document.querySelectorAll('.comment');
     //пытался, не вышло, если подскажут как сделать этим способом, буду рад
     // for (const reponseComment of reponseComments) {
@@ -114,6 +115,7 @@
 
     ListComent.innerHTML = comentHTML;
     initEventListernes();
+    buttonComm();
 
   }
 
@@ -142,18 +144,20 @@
   }
 
   // Добавляет обработчик события «клик» на элемент buttonComent
-  buttonComent.addEventListener("click", () => {
-    let Data = new Date()
-    let day = Data.getDate()
-    if (day < 10) day = '0' + day;
-    let month = Data.getMonth() + 1
-    if (month < 10) month = '0' + month;
-    let hours = Data.getHours()
-    if (hours < 10) hours = '0' + hours;
-    let minuts = Data.getMinutes()
-    if (minuts < 10) minuts = '0' + minuts;
-    let year = Data.getFullYear() - 2000
-    let DataText = day + '.' + month + '.' + year + ' ' + hours + ':' + minuts
+  const buttonComm = () => { 
+    let buttonComent = document.getElementById('add-button');
+    buttonComent.addEventListener("click", () => {
+    ////let Data = new Date()
+   // let day = Data.getDate()
+   // if (day < 10) day = '0' + day;
+   // let month = Data.getMonth() + 1
+   // if (month < 10) month = '0' + month;
+   // let hours = Data.getHours()
+   // if (hours < 10) hours = '0' + hours;
+   // let minuts = Data.getMinutes()
+    //if (minuts < 10) minuts = '0' + minuts;
+    //let year = Data.getFullYear() - 2000
+   // let DataText = day + '.' + month + '.' + year + ' ' + hours + ':' + minuts *\
     inputName.classList.remove("error")
     if (inputName.value.trim() === "") { inputName.classList.add("error"); return; }
     if (TextComent.value.trim() === "") { TextComent.classList.add("error"); return; }
@@ -192,7 +196,7 @@
     inputName.value = "";
     TextComent.value = "";
     replyComment();
-  });
+  });}
 
   /// Удалить error при вводе
   inputName.addEventListener('input', () => {
