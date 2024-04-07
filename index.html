@@ -42,11 +42,19 @@
   let addForm = document.getElementById('add-form')
   let loaderElement = document.getElementById("loading");
 
-
+function helpComent () {
+  addForm.innerHTML = `<input id="input-name" type="text" value="${inputName.value}" class="add-form-name" placeholder="Введите ваше имя" />
+      <textarea id="text-coment" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
+        rows="4">${TextComent.value}</textarea>
+      <div class="add-form-row">
+        <button id="add-button" class="add-form-button">Написать</button>
+      </div>`;
+      buttonComent = document.getElementById('add-button');
+      buttonComm();}
 
   buttonComent.disabled = true;
   loaderElement.innerHTML = "Подождите пожалуйста, комментарии загружаются...";
-  function getComment() {
+  function getComment() { 
     const fetchPromis = fetch('https://wedev-api.sky.pro/api/v1/belyaev/comments', { method: "GET" })
 
     fetchPromis.then((response) => {
@@ -82,9 +90,6 @@
   const replyComment = () => {
     const TextComent = document.getElementById('text-coment');
     const reponseComment = document.querySelectorAll('.comment');
-    //пытался, не вышло, если подскажут как сделать этим способом, буду рад
-    // for (const reponseComment of reponseComments) {
-    //   reponseComment.addEventListener('click', () => {
     reponseComment.forEach((el, index) => {
       el.addEventListener('click', () => {
 
@@ -143,34 +148,16 @@
     }
   }
 
-  // Добавляет обработчик события «клик» на элемент buttonComent
   const buttonComm = () => {
-  inputName = document.getElementById('input-name');
-  TextComent = document.getElementById('text-coment');
-  buttonComent = document.getElementById('add-button');
-   if (!buttonComent) return
+    inputName = document.getElementById('input-name');
+    TextComent = document.getElementById('text-coment');
+   buttonComent = document.getElementById('add-button');
+    if (!buttonComent) return
     buttonComent.addEventListener("click", () => {
-      ////let Data = new Date()
-      // let day = Data.getDate()
-      // if (day < 10) day = '0' + day;
-      // let month = Data.getMonth() + 1
-      // if (month < 10) month = '0' + month;
-      // let hours = Data.getHours()
-      // if (hours < 10) hours = '0' + hours;
-      // let minuts = Data.getMinutes()
-      //if (minuts < 10) minuts = '0' + minuts;
-      //let year = Data.getFullYear() - 2000
-      // let DataText = day + '.' + month + '.' + year + ' ' + hours + ':' + minuts *\
       inputName.classList.remove("error")
       if (inputName.value.trim() === "") { inputName.classList.add("error"); return; }
       if (TextComent.value.trim() === "") { TextComent.classList.add("error"); return; }
-      //const oldAddForm = addForm.innerHTML;
-      //addForm.classList.remove("add-form");
-      // addForm.textContent = "Комментарий добавляется...";
-      //buttonComent.disabled = true;
-      // buttonComent.textContent = 'Элемент добавлется...';
       buttonComent.disabled = true;
-      //buttonComent.textContent = "Комментарий добавляется...";
       addForm.innerHTML = "Подождите пожалуйста, комментарии загружаются...";
 
       const fetchPromis = fetch('https://wedev-api.sky.pro/api/v1/belyaev/comments', {
@@ -181,12 +168,23 @@
         }),
       });
       fetchPromis.then((response) => {
-        //   buttonComent.disabled = false;
-        // buttonComent.textContent = 'Написать';;
-        //addForm.innerHTML = oldAddForm, 
-        //    addForm.classList.add("add-form");
-        if (buttonComent)
-        buttonComent.disabled = false;
+        if (response.status === 400) {
+          if (buttonComent)
+          buttonComent.disabled = false;
+          helpComent ();
+          alert("Поля ввода имени и текста комментария должны содержать не менее 3 символов в каждом");
+          
+       } 
+        else if (response.status === 500) {
+          if (buttonComent)
+          buttonComent.disabled = false;
+          helpComent ();
+          alert("Извините, сервер упал, попробуйте позже")
+          
+       } 
+        else
+        { if (buttonComent)
+          buttonComent.disabled = false;
         addForm.innerHTML = `<input id="input-name" type="text" value="" class="add-form-name" placeholder="Введите ваше имя" />
       <textarea id="text-coment" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
         rows="4"></textarea>
@@ -194,10 +192,21 @@
         <button id="add-button" class="add-form-button">Написать</button>
       </div>`;
         getComment();
+        initEventListernes();
+        renderComents();
+        replyComment();};
+      }
+        ).catch((error) => {
+          helpComent ();
+      buttonComent = document.getElementById('add-button');
+      if (buttonComent)
+          buttonComent.disabled = false;
+        alert("кажется, что что то пошло ни так, попробуй позже");
+    
       });
-      initEventListernes();
-      renderComents();
-      replyComment();
+      //TODO отправлять в систему сбора ошибок
+      //console.warn(error);
+
     });
   }
 
@@ -209,8 +218,6 @@
   TextComent.addEventListener('input', () => {
     TextComent.classList.remove('error');
   });
-
-
 
   replyComment();
 
