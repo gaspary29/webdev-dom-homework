@@ -42,23 +42,25 @@
   let addForm = document.getElementById('add-form')
   let loaderElement = document.getElementById("loading");
 
-function helpComent () {
-  addForm.innerHTML = `<input id="input-name" type="text" value="${inputName.value}" class="add-form-name" placeholder="Введите ваше имя" />
+  function helpComent() {
+    addForm.innerHTML = `<input id="input-name" type="text" value="${inputName.value}" class="add-form-name" placeholder="Введите ваше имя" />
       <textarea id="text-coment" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
         rows="4">${TextComent.value}</textarea>
       <div class="add-form-row">
         <button id="add-button" class="add-form-button">Написать</button>
       </div>`;
-      buttonComent = document.getElementById('add-button');
-      buttonComm();}
+    buttonComent = document.getElementById('add-button');
+    buttonComm();
+  }
 
   buttonComent.disabled = true;
   loaderElement.innerHTML = "Подождите пожалуйста, комментарии загружаются...";
-  function getComment() { 
+  function getComment() {
     const fetchPromis = fetch('https://wedev-api.sky.pro/api/v1/belyaev/comments', { method: "GET" })
 
     fetchPromis.then((response) => {
-      jsonePromise = response.json();
+      if (response.status === 500) { alert("Извините, сервер упал, попробуйте позже") }
+      else {jsonePromise = response.json();}
       jsonePromise.then((responseData) => {
         const appComment = responseData.comments.map((comment) => {
           return {
@@ -70,7 +72,7 @@ function helpComent () {
             comment: comment.text,
             likes: comment.likes,
             isLiked: false,
-            isEdited: false
+            isEdited: false,
           };
         })
         commentators = appComment
@@ -79,6 +81,8 @@ function helpComent () {
       }).then((response) => {
         buttonComent.disabled = false;
         loaderElement.textContent = "";
+      }).catch((error) => {
+        alert("кажется, что что то пошло ни так, попробуй позже");
       });
     });
   };
@@ -151,7 +155,7 @@ function helpComent () {
   const buttonComm = () => {
     inputName = document.getElementById('input-name');
     TextComent = document.getElementById('text-coment');
-   buttonComent = document.getElementById('add-button');
+    buttonComent = document.getElementById('add-button');
     if (!buttonComent) return
     buttonComent.addEventListener("click", () => {
       inputName.classList.remove("error")
@@ -165,44 +169,47 @@ function helpComent () {
         body: JSON.stringify({
           name: inputName.value.replaceAll('<', '&lt;').replaceAll('>', '&gt;'),
           text: TextComent.value.replaceAll('<', '&lt;').replaceAll('>', '&gt;'),
+          forceError: false,
         }),
       });
       fetchPromis.then((response) => {
         if (response.status === 400) {
           if (buttonComent)
-          buttonComent.disabled = false;
-          helpComent ();
+            buttonComent.disabled = false;
+          helpComent();
           alert("Поля ввода имени и текста комментария должны содержать не менее 3 символов в каждом");
-          
-       } 
-        else if (response.status === 500) {
+          return;
+
+        }
+        if (response.status === 500) {
           if (buttonComent)
-          buttonComent.disabled = false;
-          helpComent ();
+            buttonComent.disabled = false;
+          helpComent();
           alert("Извините, сервер упал, попробуйте позже")
-          
-       } 
-        else
-        { if (buttonComent)
-          buttonComent.disabled = false;
-        addForm.innerHTML = `<input id="input-name" type="text" value="" class="add-form-name" placeholder="Введите ваше имя" />
+          return;
+
+        }
+        {
+          if (buttonComent)
+            buttonComent.disabled = false;
+          addForm.innerHTML = `<input id="input-name" type="text" value="" class="add-form-name" placeholder="Введите ваше имя" />
       <textarea id="text-coment" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
         rows="4"></textarea>
       <div class="add-form-row">
         <button id="add-button" class="add-form-button">Написать</button>
       </div>`;
-        getComment();
-        initEventListernes();
-        renderComents();
-        replyComment();};
+          getComment();
+          initEventListernes();
+          renderComents();
+          replyComment();
+        };
       }
-        ).catch((error) => {
-          helpComent ();
-      buttonComent = document.getElementById('add-button');
-      if (buttonComent)
+      ).catch((error) => {
+        helpComent();
+        buttonComent = document.getElementById('add-button');
+        if (buttonComent)
           buttonComent.disabled = false;
         alert("кажется, что что то пошло ни так, попробуй позже");
-    
       });
       //TODO отправлять в систему сбора ошибок
       //console.warn(error);
