@@ -60,7 +60,7 @@
 
     fetchPromis.then((response) => {
       if (response.status === 500) { alert("Извините, сервер упал, попробуйте позже") }
-      else {jsonePromise = response.json();}
+      else { jsonePromise = response.json(); }
       jsonePromise.then((responseData) => {
         const appComment = responseData.comments.map((comment) => {
           return {
@@ -197,7 +197,7 @@
       <div class="add-form-row">
         <button id="add-button" class="add-form-button">Написать</button>
       </div>`;
-      getComment();
+          getComment();
         };
       }
       ).catch((error) => {
