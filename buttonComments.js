@@ -1,25 +1,29 @@
 import { buttonComent, inputName, TextComent, addForm, getComment } from "./main.js";
 
 import { helpComent } from "./buttonCommentsText.js";
+import { postTodo } from "./API.js";
 
 
 export const buttonComm = () => {
-  if (!buttonComent) return;
+ const buttonComent = document.getElementById('add-button');
+ const inputName = document.getElementById('input-name');
+ const TextComent = document.getElementById('text-coment');
+ const addForm = document.getElementById('add-form')
+  if (!document.getElementById('add-button')) return;
   buttonComent.addEventListener("click", () => {
     inputName.classList.remove("error");
     if (inputName.value.trim() === "") { inputName.classList.add("error"); return; }
     if (TextComent.value.trim() === "") { TextComent.classList.add("error"); return; }
     buttonComent.disabled = true;
     addForm.innerHTML = "Подождите пожалуйста, комментарии загружаются...";
-    const fetchPromis = fetch('https://wedev-api.sky.pro/api/v1/belyaev/comments', {
+    return fetch('https://wedev-api.sky.pro/api/v1/belyaev/comments', {
       method: "POST",
       body: JSON.stringify({
         name: inputName.value.replaceAll('<', '&lt;').replaceAll('>', '&gt;'),
         text: TextComent.value.replaceAll('<', '&lt;').replaceAll('>', '&gt;'),
         forceError: false,
       }),
-    });
-    fetchPromis.then((response) => {
+    }).then((response) => {
       if (response.status === 400) {
         if (buttonComent)
           buttonComent.disabled = false;
@@ -37,8 +41,6 @@ export const buttonComm = () => {
 
       }
       {
-        if (buttonComent)
-          buttonComent.disabled = false;
         addForm.innerHTML = `<input id="input-name" type="text" value="" class="add-form-name" placeholder="Введите ваше имя" />
       <textarea id="text-coment" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
         rows="4"></textarea>

@@ -15,8 +15,7 @@ import { replyComment } from "./replyComment.js";
   buttonComent.disabled = true;
   loaderElement.innerHTML = "Подождите пожалуйста, комментарии загружаются...";
   export function getComment() {
-    const fetchPromis = fetch('https://wedev-api.sky.pro/api/v1/belyaev/comments', { method: "GET" })
-    fetchPromis.then((response) => {
+    return fetch('https://wedev-api.sky.pro/api/v1/belyaev/comments', { method: "GET" }).then((response) => {
       if (response.status === 500) { alert("Извините, сервер упал, попробуйте позже") }
       response.json().then((responseData) => {
         const appComment = responseData.comments.map((comment) => {
