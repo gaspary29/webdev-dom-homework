@@ -1,14 +1,15 @@
 import { buttonComent, inputName, TextComent, addForm, getComment } from "./main.js";
 
 import { helpComent } from "./buttonCommentsText.js";
-import { postTodo } from "./API.js";
+
 
 
 export const buttonComm = () => {
  const buttonComent = document.getElementById('add-button');
+ const ListComent = document.getElementById('list');
  const inputName = document.getElementById('input-name');
  const TextComent = document.getElementById('text-coment');
- const addForm = document.getElementById('add-form')
+   let addForm = document.getElementById('add-form')
   if (!document.getElementById('add-button')) return;
   buttonComent.addEventListener("click", () => {
     inputName.classList.remove("error");
