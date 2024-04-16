@@ -1,8 +1,6 @@
 import { renderComents } from "./renderComments.js";
-import { replyComment } from "./replyComment.js";
-//import { helpComent } from "./buttonCommentsText.js";
-//import { renderComents } from "./renderComments.js";
-//import { replyComment } from "./replyComment.js";
+import { getComments as getCommentsAPI } from "./API.js";
+
 
   document.getElementById('text-coment').value = '';
   export let buttonComent = document.getElementById('add-button');
@@ -15,10 +13,8 @@ import { replyComment } from "./replyComment.js";
   buttonComent.disabled = true;
   loaderElement.innerHTML = "Подождите пожалуйста, комментарии загружаются...";
   export function getComment() {
-    return fetch('https://wedev-api.sky.pro/api/v1/belyaev/comments', { method: "GET" }).then((response) => {
-      if (response.status === 500) { alert("Извините, сервер упал, попробуйте позже") }
-      response.json().then((responseData) => {
-        const appComment = responseData.comments.map((comment) => {
+   getCommentsAPI().then((response) => {
+        const appComment = response.comments.map((comment) => {
           return {
             name: comment.author.name,
             date: new Date(comment.date).toLocaleTimeString('sm', {
@@ -33,15 +29,13 @@ import { replyComment } from "./replyComment.js";
         })
         commentators = appComment
         renderComents();
-        replyComment();
-      }).then((response) => {
+      }).then(() => {
         buttonComent.disabled = false;
         loaderElement.textContent = "";
-      }).catch((error) => {
+      }).catch(() => {
         alert("кажется, что что то пошло ни так, попробуй позже");
       });
-    });
-  };
+    };
   getComment();
   // получить из хранилища данных
   export let commentators = [];
@@ -53,6 +47,4 @@ import { replyComment } from "./replyComment.js";
   TextComent.addEventListener('input', () => {
     TextComent.classList.remove('error');
   });
-
-  replyComment();
 

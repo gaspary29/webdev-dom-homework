@@ -1,9 +1,7 @@
 import { commentators, ListComent } from "./main.js";
-import { buttonComm } from "./buttonComments.js";
-import { initEventListernes } from "./initEventListernes.js";
-//import { commentators, ListComent, buttonComm } from "./main.js";
-//import { initEventListernes } from "./initEventListernes.js";
-//
+import {  initAddCommentListener } from "./initAddCommentListener.js";
+import { initLikeListener } from "./initLikeListener.js";
+import { initReplyCommentListener } from "./initReplyCommentListener.js";
 
 
 export const renderComents = () => {
@@ -29,7 +27,8 @@ export const renderComents = () => {
   }).join("");
 
   ListComent.innerHTML = comentHTML;
-  initEventListernes();
-  buttonComm();
+  initLikeListener();
+  initAddCommentListener();
+  initReplyCommentListener();
 
 };

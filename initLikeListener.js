@@ -1,16 +1,13 @@
 import { commentators } from "./main.js";
 import { renderComents } from "./renderComments.js";
-import { replyComment } from "./replyComment.js";
-//import { commentators } from "./main.js";
-//import { renderComents } from "./renderComments.js";
-//import { replyComment } from "./replyComment.js";
 
-export const initEventListernes = () => {
+
+
+export const initLikeListener = () => {
   const LikeComents = document.querySelectorAll('.like-button');
 
   for (const LikeComent of LikeComents) {
     const index = LikeComent.dataset.index;
-    const counter = LikeComent.dataset.like;
     LikeComent.addEventListener("click", (event) => {
       event.stopImmediatePropagation();
       if (commentators[index].isLiked === false) {
@@ -24,7 +21,7 @@ export const initEventListernes = () => {
         commentators[index].isLiked = false;
       };
       renderComents();
-      replyComment();
+     
     });
   }
 };
