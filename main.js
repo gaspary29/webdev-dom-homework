@@ -1,16 +1,21 @@
 import { renderComents } from "./renderComments.js";
 import { getComments as getCommentsAPI } from "./API.js";
+import { renderLogin } from "./renderLoginRegistration.js";
 
 
-  document.getElementById('text-coment').value = '';
+export let user = JSON.parse(localStorage.getItem("user"));
+export const setUser = (newUser) => {
+    user = newUser;
+};
+
+export let appElement = document.getElementById("app")
   export let buttonComent = document.getElementById('add-button');
   export let ListComent = document.getElementById('list');
   export let inputName = document.getElementById('input-name');
-  export let TextComent = document.getElementById('text-coment');
-  export let addForm = document.getElementById('add-form')
+ export let TextComent = document.getElementById('text-coment');
+ export let addForm = document.getElementById('add-form')
   let loaderElement = document.getElementById("loading");
 
-  buttonComent.disabled = true;
   loaderElement.innerHTML = "Подождите пожалуйста, комментарии загружаются...";
   export function getComment() {
    getCommentsAPI().then((response) => {
@@ -30,21 +35,16 @@ import { getComments as getCommentsAPI } from "./API.js";
         commentators = appComment
         renderComents();
       }).then(() => {
-        buttonComent.disabled = false;
+   //     buttonComent.disabled = false;
         loaderElement.textContent = "";
       }).catch(() => {
         alert("кажется, что что то пошло ни так, попробуй позже");
       });
     };
   getComment();
+
   // получить из хранилища данных
   export let commentators = [];
   /// Удалить error при вводе
-  inputName.addEventListener('input', () => {
-    inputName.classList.remove('error');
-  });
 
-  TextComent.addEventListener('input', () => {
-    TextComent.classList.remove('error');
-  });
 

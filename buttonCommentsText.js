@@ -3,7 +3,8 @@ import { initAddCommentListener } from "./initAddCommentListener.js";
 
 
 export function helpComent(inputNamevalue="",TextComentvalue="") {
-  addForm.innerHTML = `<input id="input-name" type="text" value="${inputNamevalue}" class="add-form-name" placeholder="Введите ваше имя" />
+  let addForm = document.getElementById('add-form')
+  addForm.innerHTML = `<input id="input-name" type="text" value="${(localStorage.getItem("name"))}"  class="add-form-name"  disabled/>
       <textarea id="text-coment" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
         rows="4">${TextComentvalue}</textarea>
       <div class="add-form-row">
