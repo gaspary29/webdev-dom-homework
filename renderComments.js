@@ -4,7 +4,7 @@ import { initLikeListener } from "./initLikeListener.js";
 import { initReplyCommentListener } from "./initReplyCommentListener.js";
 import { token } from "./API.js";
 import { renderLogin } from "./renderLoginRegistration.js";
-
+//format(new Date(comment.date),"yyyy-MM-dd hh.mm.ss"),
 export const renderComents = () => {
 
   const comentHTML = commentators.map((commentator, index) => {
